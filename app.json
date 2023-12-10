@@ -2,29 +2,61 @@
   "expo": {
     "name": "Pola",
     "slug": "Pola",
+    "owner": "gsdv",
+    "scheme": "gsdv-pola",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "me.gsdv.pola"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "me.gsdv.pola"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "plugins": [
+        [
+          "expo-build-properties",
+          {
+            "android": {
+              "compileSdkVersion": 31,
+              "targetSdkVersion": 31,
+              "minSdkVersion": 24,
+              "buildToolsVersion": "31.0.0",
+              "packagingOptions": {
+                "pickFirst": [
+                  "lib/arm64-v8a/libc++_shared.so",
+                  "lib/armeabi-v7a/libc++_shared.so",
+                  "lib/x86/libc++_shared.so",
+                  "lib/x86_64/libc++_shared.so"
+                ]
+              }
+            },
+            "ios": {
+              "deploymentTarget": "13.0"
+            }
+          }
+        ]
+    ],
+    "extra": {
+        "eas": {
+            "projectId": "9c339c02-9d64-4c1b-ae83-b31ac496135f"
+        }
     }
   }
 }
