@@ -87,7 +87,7 @@ export default function App() {
       {result &&
         <Plyr uri={result} title={'Result'} />
       }
-      <TestText />
+      {/* <TestText /> */}
     </View>
   );
 }
