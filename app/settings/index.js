@@ -1,12 +1,12 @@
 import SafeArea from '@components/SafeArea';
-import Home from '@screens/Home';
+import Settings from "@screens/Settings";
 
 
 
 export default function Index() {
     return (
         <SafeArea>
-            <Home />
+            <Settings />
         </SafeArea>
     );
 }

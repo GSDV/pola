@@ -6,11 +6,10 @@ module.exports = function(api) {
           'expo-router/babel',
           ["module-resolver", {
               "alias": {
-                "@Navigation": "./src/navigation",
-                "@Components": "./src/components",
-                "@Screens": "./src/screens",
-                "@Stores": "./src/stores",
-                "@Assets": "./assets"
+                "@components": "./src/components",
+                "@screens": "./src/screens",
+                "@assets": "./src/assets",
+                "@util": "./src/util"
               },
               "extensions": [
                 ".js",
