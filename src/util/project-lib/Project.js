@@ -34,6 +34,20 @@ export class Project {
         }
     }
 
+    async stopAddingVideo() {
+        const vidURI = this.generateFileName(this.numVideos);
+        try {
+            await FFmpegKit.cancel();
+            let vRes = await FileSystem.getInfoAsync(vidURI);
+            if (vRes.exists) {
+                await FileSystem.deleteAsync(vidURI);
+                this.numVideos--;
+            }
+        } catch (err) {
+            console.error('Error stopping video adding:', err);
+        }
+    }
+
     async updateVideo(idx, originURI) {
         try {
             await FileSystem.deleteAsync(this.generateFileName(idx));
@@ -103,6 +117,7 @@ export class Project {
         await FileSystem.deleteAsync(temp);
         return output;
     }
+
 
 
     async destructor() {

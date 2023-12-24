@@ -31,9 +31,9 @@ export default function ProjectView() {
 
     return (
     <>
-        <ProjectViewHeader pos={projPos} refresher={refresher} refresh={refresh} />
+        <ProjectViewHeader pos={projPos} refresher={refresher} refresh={refresh} addingVideo={addingVideo} />
         <Thumbnail pos={projPos} key={refresher.toString()} />
-        <ProjectViewDashboard pos={projPos} setAddingVideo={setAddingVideo} />
+        <ProjectViewDashboard pos={projPos} setAddingVideo={setAddingVideo} addingVideo={addingVideo} />
         <Text style={[ {width: '100%', textAlign: 'center', fontSize: 15, padding: 10}, themeStyles.text ]}>Press and hold to drag videos around</Text>
         {addingVideo ? 
             <AddingVideo />
@@ -47,7 +47,7 @@ export default function ProjectView() {
 
 
 function ProjectViewHeader(props) {
-    const { pos, refresher, refresh } = props;
+    const { pos, refresher, refresh, addingVideo } = props;
     const router = useRouter();
 
     const pmContext = useContext(ProjectManagerContext);
@@ -89,9 +89,14 @@ function ProjectViewHeader(props) {
     };
 
 
+    const goBack = () => {
+        if (addingVideo) proj.stopAddingVideo();
+        router.back();
+    }
+
 
     let options = [
-        { isMenu: false, icon: 'chevron-back', action: () => {router.back()} },
+        { isMenu: false, icon: 'chevron-back', action: goBack },
         { isMenu: true, menuOptions: [
                 { isDestructive: false, title: 'Cancel', action: () => {} },
                 { isDestructive: false, title: 'Rename Project', action: renameProjectAlert },
@@ -128,7 +133,7 @@ function Thumbnail(props) {
 
 
 function ProjectViewDashboard(props) {
-    const { pos, setAddingVideo } = props;
+    const { pos, setAddingVideo, addingVideo } = props;
     const router = useRouter();
     const pmContext = useContext(ProjectManagerContext);
     const proj = pmContext.pm.projects[pos];
@@ -167,7 +172,7 @@ function ProjectViewDashboard(props) {
     ];
 
 
-    return ( <Dashboard buttons={buttons} /> );
+    return ( <Dashboard buttons={buttons} disabled={addingVideo} /> );
 }
 
 
