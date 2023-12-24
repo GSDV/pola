@@ -90,6 +90,7 @@ function VidPlayer(props) {
 
     useEffect(() => {
         if (status.isPlaying) triggerAudio();
+        if (status.positionMillis==status.durationMillis && status.isPlaying) video.current.playFromPositionAsync(0);
     }, [status.isPlaying]);
 
     return (
