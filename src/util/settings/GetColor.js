@@ -6,8 +6,8 @@ let colors = {
     },
     'dark': {
         'red': { 'primary': '#C54646', 'secondary': '#881818' },
-        'green': { 'primary': '#465E45', 'secondary': '#017F3C' },
-        'blue': { 'primary': '#43A8CA', 'secondary': '#192988' },
+        'green': { 'primary': '#4ba145', 'secondary': '#017F3C' },
+        'blue': { 'primary': '#15618a', 'secondary': '#192988' },
     },
 }
 

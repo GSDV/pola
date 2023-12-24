@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import * as FileSystem from 'expo-file-system';
 
 
 

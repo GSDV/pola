@@ -4,19 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import getColor from '@util/settings/GetColor';
 
 
-// export type ColorType = 'red' | 'green' | 'blue';
-
-// // LIGHT  |  DARK
-// type PrimaryType = '#FF858E' | '#8BBD87' | '#43A8CA'  |  '#C54646' | '#465E45' | '#43A8CA';
-// type SecondaryType = '#C02F2F' | '#03A079' | '#1951AF'  |  '#881818' | '#017F3C' | '#192988';
-
-// type ColorContextType = {
-//     color: ColorType,
-//     primary: PrimaryType,
-//     secondary: SecondaryType,
-//     setColor: (option: ColorType) => void
-// }
-
 
 const ColorContext = createContext({color: 'red', primary: '#FF858E', secondary: '#C02F2F', setColor: () => {}});
 
