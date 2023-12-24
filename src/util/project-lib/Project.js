@@ -57,15 +57,15 @@ export class Project {
 
     getThumbnail() {
         if (!this.thumbnail) return '';
-        return this.thumbnail;
+        return `${FileSystem.documentDirectory}pola-P${this.id}-thumbnail.png`;
     }
 
     async updateThumbnail(originURL) {
         const destinationURI = `${FileSystem.documentDirectory}pola-P${this.id}-thumbnail.png`;
         try {
             let tRes = await FileSystem.getInfoAsync(destinationURI);   if (tRes.exists) await FileSystem.deleteAsync(destinationURI);
-            await FileSystem.moveAsync({ from: originURL, to: destinationURI });
-            this.thumbnail = destinationURI;
+            await FileSystem.copyAsync({ from: originURL, to: destinationURI });
+            this.thumbnail = true;
             console.log('Properly updated thumbnail:', destinationURI);
         } catch (err) {
             console.error('Error updating thumbnail:', err);

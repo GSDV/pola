@@ -52,7 +52,7 @@ export default class ProjectsManager {
                 uuidv4(),
                 name,
                 'Project Description',
-                null,
+                false,
                 0
             )
         );
