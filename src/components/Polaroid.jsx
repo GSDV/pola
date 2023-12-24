@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 
 
 
@@ -6,6 +7,7 @@ export default function Polaroid(props) {
     const { proj } = props;
     const thumbnail = proj.getThumbnail();
     let thumbnailIMG;
+
     if (!thumbnail) thumbnailIMG = <Image style={{ width: 140, height: 140 }} source={require('@assets/thumbnail.png')} />;
     else thumbnailIMG = <Image style={{ width: 140, height: 140 }} source={{ uri: thumbnail }} />;
 

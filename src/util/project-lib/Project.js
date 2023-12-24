@@ -1,17 +1,5 @@
 import * as FileSystem from 'expo-file-system';
-import { FFmpegKit, FFmpegKitConfig, ReturnCode, FFprobeKit } from 'ffmpeg-kit-react-native';
-
-
-
-// export interface projJSON {
-//     id: string;
-//     name: string;
-//     desc: string;
-//     thumbnail: string;
-//     numVideos: number;  // 0-indexed. 0 means no vids stored, 1 means 1 vid stored (with val of 0)
-// }
-
-
+import { FFmpegKit, FFmpegKitConfig } from 'ffmpeg-kit-react-native';
 
 export class Project {
     id;
@@ -29,7 +17,7 @@ export class Project {
     }
 
 
-    // nv: video number
+    // vn: video number
     generateFileName(vn) {
         return `${FileSystem.documentDirectory}pola-P${this.id}-V${vn}.mov`;
     }
@@ -51,7 +39,7 @@ export class Project {
     async updateVideo(idx, originURI) {
         try {
             await FileSystem.deleteAsync(this.generateFileName(idx));
-            await FileSystem.copyAsync({ from: originURI, to: this.generateFileName(idx) })
+            await FFmpegKit.execute(`-y -i ${originURI} -vf "scale=2160:3840:force_original_aspect_ratio=decrease,pad=2160:3840:(ow-iw)/2:(oh-ih)/2:black" -r 30 -c:a copy -b:v 20M ${this.generateFileName(idx)}`);
         }
         catch (err) { console.error('Error replacing video:', err); }
     }
@@ -75,8 +63,9 @@ export class Project {
     async updateThumbnail(originURL) {
         const destinationURI = `${FileSystem.documentDirectory}pola-P${this.id}-thumbnail.png`;
         try {
+            let tRes = await FileSystem.getInfoAsync(destinationURI);   if (tRes.exists) await FileSystem.deleteAsync(destinationURI);
             await FileSystem.moveAsync({ from: originURL, to: destinationURI });
-            this.thumbnail = `${FileSystem.documentDirectory}pola-P${this.id}-thumbnail.png`;
+            this.thumbnail = destinationURI;
             console.log('Properly updated thumbnail:', destinationURI);
         } catch (err) {
             console.error('Error updating thumbnail:', err);

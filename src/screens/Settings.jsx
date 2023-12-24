@@ -106,14 +106,19 @@ function ColorThemeOption() {
 function DeleteProjectsOption() {
     const pmContext = useContext(ProjectManagerContext);
 
-    const deleteProjsAlert = () =>  Alert.alert(
-        'Are you sure you want to delete all your projects?',
-        '',
-        [
-            { text: "Cancel", style: 'cancel' },
-            { text: "Yes, delete", onPress: () => {pmContext.pm.deleteAllProjects()}, style: 'destructive' }
-        ]
-    );
+    // const deleteProjsAlert = () =>  Alert.alert(
+    //     'Are you sure you want to delete all your projects?',
+    //     '',
+    //     [
+    //         { text: "Cancel", style: 'cancel' },
+    //         { text: "Yes, delete", onPress: () => {pmContext.pm.deleteAllProjects()}, style: 'destructive' }
+    //     ]
+    // );
+
+    const deleteProjsAlert = () => {
+        pmContext.pm.projects = [];
+        pmContext.saveProjects()
+    }
 
 
 

@@ -15,10 +15,13 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 
 import { DraggableGrid } from 'react-native-draggable-grid';
 
+import LoadingSymbol from '@components/LoadingSymbol';
+
 
 
 export default function ProjectView() {
     const [refresher, refresh] = useState(false);
+    const [addingVideo, setAddingVideo] = useState(false);
 
     const themeStyles = ThemeStyles();
 
@@ -30,9 +33,13 @@ export default function ProjectView() {
     <>
         <ProjectViewHeader pos={projPos} refresher={refresher} refresh={refresh} />
         <Thumbnail pos={projPos} key={refresher.toString()} />
-        <ProjectViewDashboard pos={projPos} />
+        <ProjectViewDashboard pos={projPos} setAddingVideo={setAddingVideo} />
         <Text style={[ {width: '100%', textAlign: 'center', fontSize: 15, padding: 10}, themeStyles.text ]}>Press and hold to drag videos around</Text>
-        <VideoGrid pos={projPos} />
+        {addingVideo ? 
+            <AddingVideo />
+        :
+            <VideoGrid pos={projPos} />
+        }
     </>
     );
 }
@@ -121,7 +128,7 @@ function Thumbnail(props) {
 
 
 function ProjectViewDashboard(props) {
-    const { pos } = props;
+    const { pos, setAddingVideo } = props;
     const router = useRouter();
     const pmContext = useContext(ProjectManagerContext);
     const proj = pmContext.pm.projects[pos];
@@ -138,8 +145,10 @@ function ProjectViewDashboard(props) {
         });
 
         if (!result.canceled) {
+            setAddingVideo(true)
             await proj.addVideo(result.assets[0].uri);
             await pmContext.saveProjects();
+            setAddingVideo(false)
         }
     };
 
@@ -160,8 +169,6 @@ function ProjectViewDashboard(props) {
 
     return ( <Dashboard buttons={buttons} /> );
 }
-
-
 
 
 
@@ -255,4 +262,22 @@ const gridStyles = StyleSheet.create({
         height: 110,
         borderRadius: 7
     }
+});
+
+
+
+
+
+function AddingVideo() {
+    return (
+        <View style={loadingStyles.container}>
+            <LoadingSymbol title='Encoding and Adding Video' loadingMsg='This may take a few seconds, do not navigate away from this screen.' />
+        </View>
+    );
+}
+
+const loadingStyles = StyleSheet.create({
+    container: {
+        padding: 30,
+    },
 });

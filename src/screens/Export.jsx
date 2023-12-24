@@ -15,9 +15,6 @@ import * as FileSystem from 'expo-file-system';
 
 import * as MediaLibrary from 'expo-media-library';
 
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
-
 
 
 export default function Export() {
@@ -35,10 +32,10 @@ export default function Export() {
     const [loading, setLoading] = useState(true);
 
     const getStitch = async () => {
-        let uri = await proj.makeStitch();
-        setLoading(false);
-        setFinalURI(uri);
         setStitchRequest(true);
+        let uri = await proj.makeStitch();
+        setFinalURI(uri);
+        setLoading(false);
     }
     
     return (
@@ -87,8 +84,6 @@ function VidPlayer(props) {
 
     const saveStitchToDevice = async () => {
         const stitchURI = `${FileSystem.documentDirectory}output.mov`;
-        // const destinationURI = `${FileSystem.documentDirectory}${uuidv4()}.mov`;
-        // await FileSystem.downloadAsync(stitchURI, destinationURI);
         await MediaLibrary.saveToLibraryAsync(stitchURI);
         console.log("Success!")
     }
