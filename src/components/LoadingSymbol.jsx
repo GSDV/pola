@@ -1,6 +1,7 @@
 import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
 import { useContext } from 'react';
 import { ColorContext } from '@util/settings/ColorContext.jsx';
+import { ThemeContext } from '@util/settings/ThemeContext.jsx';
 
 import ThemeStyles from '@util/styles/theme.js';
 
@@ -9,13 +10,24 @@ import ThemeStyles from '@util/styles/theme.js';
 export default function LoadingSymbol(props) {
     const { title, loadingMsg } = props;
     const colorContext = useContext(ColorContext);
+    const themeContext = useContext(ThemeContext);
     const themeStyles = ThemeStyles();
 
     return (
         <View style={styles.container}>
-            <ActivityIndicator size="large" color={colorContext.secondary} />
-            <Text style={[ styles.text, themeStyles.secondary ]}>{title}</Text>
-            <Text style={[ styles.text, themeStyles.secondary ]}>{loadingMsg}</Text>
+            {themeContext.darkMode ?
+            <>
+                <ActivityIndicator size="large" color={colorContext.primary} />
+                <Text style={[ styles.text, themeStyles.primary ]}>{title}</Text>
+                <Text style={[ styles.text, themeStyles.primary ]}>{loadingMsg}</Text>
+            </>
+            :
+            <>
+                <ActivityIndicator size="large" color={colorContext.secondary} />
+                <Text style={[ styles.text, themeStyles.secondary ]}>{title}</Text>
+                <Text style={[ styles.text, themeStyles.secondary ]}>{loadingMsg}</Text>
+            </>
+            }
         </View>
     );
 }
