@@ -82,10 +82,12 @@ function VidPlayer(props) {
         video.current.playAsync();
     };
 
+    const [savedStitch, setSaveStitch] = useState(false);
+
     const saveStitchToDevice = async () => {
         const stitchURI = `${FileSystem.documentDirectory}output.mov`;
         await MediaLibrary.saveToLibraryAsync(stitchURI);
-        console.log("Success!")
+        setSaveStitch(true);
     }
 
     useEffect(() => {
@@ -107,9 +109,13 @@ function VidPlayer(props) {
                         resizeMode={ResizeMode.COVER}
                         onPlaybackStatusUpdate={(status) => setStatus(status)}
                     />
-                    <Pressable onPress={ saveStitchToDevice }>
-                        <Text style={[ themeStyles.secondaryBG, styles.text, styles.button ]}>Save Video</Text>
-                    </Pressable>
+                    {!savedStitch ?
+                        <Pressable onPress={ saveStitchToDevice }>
+                            <Text style={[ themeStyles.secondaryBG, styles.text ]}>Save Video</Text>
+                        </Pressable>
+                    :
+                        <Text style={[ themeStyles.secondary, styles.success ]}>Video was successfully saved to your camera roll!</Text>
+                    }
                 </>
             }
         </View>
@@ -128,8 +134,8 @@ const styles = StyleSheet.create({
     text: {
         padding: 20,
         overflow: 'hidden',
-        alignSelf: 'center',
         borderRadius: 20,
+        alignSelf: 'center',
         fontSize: 15,
         color: 'white',
         textAlign: 'center',
@@ -137,4 +143,10 @@ const styles = StyleSheet.create({
     error: {
         backgroundColor: 'red',
     },
+    success: {
+        padding: 20,
+        alignSelf: 'center',
+        fontSize: 15,
+        textAlign: 'center',
+    }
 });
