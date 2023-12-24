@@ -4,14 +4,12 @@ import { FFmpegKit, FFmpegKitConfig } from 'ffmpeg-kit-react-native';
 export class Project {
     id;
     name;
-    desc;
     thumbnail;
     numVideos;
 
-    constructor(id, name, desc, thumbnail, numVideos) {
+    constructor(id, name, thumbnail, numVideos) {
         this.id = id;
         this.name = name;
-        this.desc = desc;
         this.thumbnail = thumbnail;
         this.numVideos = numVideos;
     }

@@ -32,7 +32,6 @@ export default class ProjectsManager {
             projectsJSON.push({
                 id: p.id,
                 name: p.name,
-                desc: p.desc,
                 thumbnail: p.thumbnail,
                 numVideos: p.numVideos
             });
@@ -51,7 +50,6 @@ export default class ProjectsManager {
             new Project(
                 uuidv4(),
                 name,
-                'Project Description',
                 false,
                 0
             )
@@ -64,7 +62,6 @@ export default class ProjectsManager {
             new Project(
                 proj.id, 
                 proj.name, 
-                proj.desc, 
                 proj.thumbnail, 
                 proj.numVideos
             )
