@@ -108,8 +108,8 @@ export class Project {
         await FFmpegKit.execute(`-y -i ${this.generateFileName(0)} -c:v copy ${temp}`);
 
         for (let i=1; i<this.numVideos; i++) {
-            await FFmpegKit.execute(`-y -i ${temp} -i ${this.generateFileName(i)} -filter_complex "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[vout][aout]" -map "[vout]" -map "[aout]" -vsync 2 ${output}`);
-            // // await FFmpegKit.execute(`-y -i ${temp} -i ${this.generateFileName(i)} -filter_complex "concat=n=2:v=1:a=1 [v] [a]" -map "[v]" -map "[a]" -c:v copy -c:a copy ${output}`);
+            // await FFmpegKit.execute(`-y -i ${temp} -i ${this.generateFileName(i)} -filter_complex "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[vout][aout]" -map "[vout]" -map "[aout]" -vsync 2 ${output}`);
+            await FFmpegKit.execute(`-y -i ${temp} -i ${this.generateFileName(i)} -filter_complex "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[vout][aout]" -map "[vout]" -map "[aout]" -c:v h264 -c:a aac -strict experimental -b:a 192k -movflags +faststart -vsync 2 ${output}`);
             
             let res = await FileSystem.getInfoAsync(temp);   if (res.exists) await FileSystem.deleteAsync(temp);
             FileSystem.copyAsync({from: output, to: temp});
