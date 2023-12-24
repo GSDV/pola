@@ -60,9 +60,9 @@ function ProjectViewHeader(props) {
         'Are you sure you want to delete this project?', '', [
             { text: 'Cancel', style: 'cancel' },
             { text: 'Yes, delete', onPress: async () => {
+                    router.back();
                     await pmContext.pm.deleteProject(pos);
                     await pmContext.saveProjects();
-                    router.back();
                 }, style: 'destructive' }
         ]
     );
@@ -235,10 +235,7 @@ function GridImage(props) {
 
     return (
         <View style={[ gridStyles.imageView, themeStyles.secondaryBG ]}>
-            {image ?
-                <Image source={{ uri: image }} style={gridStyles.image} /> :
-                <Image source={require('@assets/thumbnail.png')} style={gridStyles.image} />
-            }
+            <Image source={{ uri: image }} style={gridStyles.image} />
         </View>
     );
 }

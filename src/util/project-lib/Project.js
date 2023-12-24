@@ -1,5 +1,5 @@
 import * as FileSystem from 'expo-file-system';
-import { FFmpegKit, ReturnCode, FFprobeKit } from 'ffmpeg-kit-react-native';
+import { FFmpegKit, FFmpegKitConfig, ReturnCode, FFprobeKit } from 'ffmpeg-kit-react-native';
 
 
 
@@ -36,9 +36,11 @@ export class Project {
 
 
     async addVideo(originURI) {
+        await FFmpegKitConfig.init();
+        
         const destinationURI = this.generateFileName(this.numVideos);
         try {
-            await FileSystem.copyAsync({ from: originURI, to: destinationURI });
+            await FFmpegKit.execute(`-y -i ${originURI} -vf "scale=2160:3840:force_original_aspect_ratio=decrease,pad=2160:3840:(ow-iw)/2:(oh-ih)/2:black" -r 30 -c:a copy -b:v 25M ${destinationURI}`);
             this.numVideos++;
             console.log('Video copied to local storage:', destinationURI);
         } catch (err) {
@@ -99,21 +101,22 @@ export class Project {
 
     async makeStitch() {
         const output = `${FileSystem.documentDirectory}output.mov`;
-        let oRes = await FileSystem.getInfoAsync(output); if (oRes.exists) await FileSystem.deleteAsync(output);
+        let oRes = await FileSystem.getInfoAsync(output);   if (oRes.exists) await FileSystem.deleteAsync(output);
         const temp = `${FileSystem.documentDirectory}temp.mov`;
-        let tRes = await FileSystem.getInfoAsync(temp); if (tRes.exists) await FileSystem.deleteAsync(temp);
+        let tRes = await FileSystem.getInfoAsync(temp);   if (tRes.exists) await FileSystem.deleteAsync(temp);
         
         await FFmpegKit.execute(`-y -i ${this.generateFileName(0)} -c:v copy ${temp}`);
 
         for (let i=1; i<this.numVideos; i++) {
             await FFmpegKit.execute(`-y -i ${temp} -i ${this.generateFileName(i)} -filter_complex "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[vout][aout]" -map "[vout]" -map "[aout]" -vsync 2 ${output}`);
-            let res = await FileSystem.getInfoAsync(temp); if (res.exists) await FileSystem.deleteAsync(temp);
-            FileSystem.copyAsync({from: output, to: temp})
+            // // await FFmpegKit.execute(`-y -i ${temp} -i ${this.generateFileName(i)} -filter_complex "concat=n=2:v=1:a=1 [v] [a]" -map "[v]" -map "[a]" -c:v copy -c:a copy ${output}`);
+            
+            let res = await FileSystem.getInfoAsync(temp);   if (res.exists) await FileSystem.deleteAsync(temp);
+            FileSystem.copyAsync({from: output, to: temp});
         }
         await FileSystem.deleteAsync(temp);
         return output;
     }
-
 
 
     async destructor() {

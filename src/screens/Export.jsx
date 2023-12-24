@@ -1,15 +1,22 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { Header } from '@components/Header';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { ProjectManagerContext } from '@util/project-lib/ProjectManagerContext.jsx';
 
 import { useRouter, useGlobalSearchParams } from 'expo-router';
 
 import LoadingSymbol from '@components/LoadingSymbol';
 
-import { Video } from 'expo-av';
+import { Video, Audio, ResizeMode } from 'expo-av';
 import ThemeStyles from '@util/styles/theme.js';
+
+import * as FileSystem from 'expo-file-system';
+
+import * as MediaLibrary from 'expo-media-library';
+
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -22,24 +29,36 @@ export default function Export() {
     const projPos = Number(params.projPos);
     const proj = pmContext.pm.projects[projPos];
 
-    const [stitchRequested, setStitchRequest] = useState(false);
 
+    const [stitchRequested, setStitchRequest] = useState(false);
+    const [finaluri, setFinalURI] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    const getStitch = async () => {
+        let uri = await proj.makeStitch();
+        setLoading(false);
+        setFinalURI(uri);
+        setStitchRequest(true);
+    }
+    
     return (
     <>
         <ExportHeader />
-        {(proj.numVideos<2) ?
-            <Text style={styles.errorText}>You need to upload two or more videos to make a stitch.</Text>
-        :
-            <>
-                {!stitchRequested ?
-                    <Pressable style={[ themeStyles.secondaryBG, styles.button ]} onPress={() => setStitchRequest(true)}>
-                        <Text>Make Stitch</Text>
-                    </Pressable>
-                :
-                    <VidPlayer />
-                }
-            </>
-        }
+        <View style={ styles.container }>
+            {(proj.numVideos < 2) ?
+                <Text style={[ styles.text, styles.error ]}>You need to upload two or more videos to make a stitch.</Text>
+            :
+                <>
+                    {!stitchRequested ?
+                        <Pressable onPress={() => getStitch()}>
+                            <Text style={[ themeStyles.secondaryBG, styles.text, styles.button ]}>Make Stitch</Text>
+                        </Pressable>
+                    :
+                        <VidPlayer loading={loading} finaluri={finaluri} />
+                    }
+                </>
+            }
+        </View>
     </>
     );
 }
@@ -55,26 +74,28 @@ function ExportHeader() {
 }
 
 
-function VidPlayer() {
+function VidPlayer(props) {
+    const { loading, finaluri } = props
     const themeStyles = ThemeStyles();
 
-    const pmContext = useContext(ProjectManagerContext);
-    const params = useGlobalSearchParams();
-    const projPos = Number(params.projPos);
-    const proj = pmContext.pm.projects[projPos];
+    const video = useRef(null);
+    const [status, setStatus] = useState({});
+    const triggerAudio = async () => {
+        await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+        video.current.playAsync();
+    };
 
-    const [loading, setLoading] = useState(true);
-    const [finaluri, setFinalURI] = useState('');
-
-    const getStitch = async () => {
-        let uri = await proj.makeStitch();
-        setLoading(false);
-        setFinalURI(uri);
+    const saveStitchToDevice = async () => {
+        const stitchURI = `${FileSystem.documentDirectory}output.mov`;
+        // const destinationURI = `${FileSystem.documentDirectory}${uuidv4()}.mov`;
+        // await FileSystem.downloadAsync(stitchURI, destinationURI);
+        await MediaLibrary.saveToLibraryAsync(stitchURI);
+        console.log("Success!")
     }
-    
+
     useEffect(() => {
-        getStitch();
-    }, []);
+        if (status.isPlaying) triggerAudio();
+    }, [status.isPlaying]);
 
     return (
         <View style={styles.container}>
@@ -83,13 +104,16 @@ function VidPlayer() {
             :
                 <>
                     <Video
-                    source={{uri: finaluri}}
-                    style={{width: 225, height: 400}}
+                        ref={video}
+                        source={{uri: finaluri}}
+                        useNativeControls
+                        style={{width: 300, height: 500}}
+                        resizeMode={ResizeMode.COVER}
+                        onPlaybackStatusUpdate={(status) => setStatus(status)}
                     />
-                    <View style={styles.dashboard}>
-                        {/* <Pressable style={[ styles.button, themeStyles.secondaryBG ]}>Save Video</Pressable> */}
-                        <Text style={[ styles.button, themeStyles.secondaryBG ]}>Save Video</Text>
-                    </View>
+                    <Pressable onPress={ saveStitchToDevice }>
+                        <Text style={[ themeStyles.secondaryBG, styles.text, styles.button ]}>Save Video</Text>
+                    </Pressable>
                 </>
             }
         </View>
@@ -101,23 +125,20 @@ function VidPlayer() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-    },
-    button: {
-        padding: 10,
-        borderRadius: 20,
-        color: 'white',
-    },
-    errorText: {
-        margin: 20,
         padding: 20,
-        backgroundColor: 'red',
+        flex: 1,
+        gap: 20,
+    },
+    text: {
+        padding: 20,
+        overflow: 'hidden',
+        alignSelf: 'center',
+        borderRadius: 20,
+        fontSize: 15,
         color: 'white',
         textAlign: 'center',
     },
-    dashboard: {
-        padding: 10,
-        width: '100%',
-        backgroundColor: 'yellow'
-    }
+    error: {
+        backgroundColor: 'red',
+    },
 });
