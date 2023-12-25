@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pola",
     "slug": "Pola",
-    "owner": "gsdv",
+    "owner": "gabsdv",
     "scheme": "gsdv-pola",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,14 +20,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "me.gsdv.pola"
+      "bundleIdentifier": "me.gsdv.Pola"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "me.gsdv.pola"
+      "package": "me.gsdv.Pola"
     },
     "plugins": [
         [

@@ -113,9 +113,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'me.gsdv.pola'
+    namespace 'me.gsdv.Pola'
     defaultConfig {
-        applicationId 'me.gsdv.pola'
+        applicationId 'me.gsdv.Pola'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

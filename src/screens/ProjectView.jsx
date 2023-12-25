@@ -185,6 +185,16 @@ function VideoGrid(props) {
     const [vidData, setVidData] = useState([]);
     const [dragging, setDragging] = useState(false);
 
+    const updateVidData = async (data) => {
+        await proj.updateOrder(data);
+        for (let i=0; i<proj.numVideos; i++) {
+            data[i].idx = i;
+            data[i].uri = proj.generateFileName(i);
+        }
+        setVidData(data);
+        pmContext.saveProjects();
+    }
+
     useEffect(() => {
         let ogVidData = [];
         for (let i=0; i<proj.numVideos; i++) {
@@ -196,14 +206,6 @@ function VideoGrid(props) {
         }
         setVidData(ogVidData);
     }, [proj.numVideos]);
-
-    const updateVidData = async (data) => {
-        await proj.updateOrder(data);
-        for (let i=0; i<proj.numVideos; i++) data[i].idx = i;
-        setVidData(data);
-        pmContext.saveProjects();
-    }
-
 
     return (
         <ScrollView scrollEnabled={!dragging}>
@@ -283,6 +285,7 @@ function AddingVideo() {
 
 const loadingStyles = StyleSheet.create({
     container: {
-        padding: 30,
+        padding: 30
     },
 });
+

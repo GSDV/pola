@@ -1,4 +1,4 @@
-package me.gsdv.pola;
+package me.gsdv.Pola;
 
 import android.os.Build;
 import android.os.Bundle;

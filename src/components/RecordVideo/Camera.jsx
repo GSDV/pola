@@ -11,7 +11,8 @@ import ThemeStyles from '@util/styles/theme';
 
 
 
-export default function Camera(setVideo) {
+export default function Camera(props) {
+    const { setVideo } = props;
     const router = useRouter();
 
     const [camDirection, setCamDirection] = useState(true);
@@ -58,7 +59,8 @@ export default function Camera(setVideo) {
 
 
 
-function Buttons(isRecording, recordVideo, stopRecording, buttons) {
+function Buttons(props) {
+    const { isRecording, recordVideo, stopRecording, buttons } = props;
     const themeStyles = ThemeStyles();
 
     return (

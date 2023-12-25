@@ -14,8 +14,8 @@ import ThemeStyles from '@util/styles/theme.js';
 
 
 export default function RecordVideo() {
-    const [hasCameraPermission, setHasCameraPermission] = useState<boolean>(false);
-    const [hasMicrophonePermission, setHasMicrophonePermission] = useState<boolean>(false);
+    const [hasCameraPermission, setHasCameraPermission] = useState(false);
+    const [hasMicrophonePermission, setHasMicrophonePermission] = useState(false);
 
     const [video, setVideo] = useState();
 
@@ -41,7 +41,6 @@ export default function RecordVideo() {
                 <SafeArea>
                     <RecordVideoHeader />
                     <ReviewVideo video={video} setVideo={setVideo} />
-
                 </SafeArea>
             );
             else return <Camera setVideo={setVideo} />;
@@ -51,7 +50,9 @@ export default function RecordVideo() {
 }
 
 
-function ErrorMessage(msg) {
+function ErrorMessage(props) {
+    const { msg } = props;
+
     return (
         <SafeArea>
             <RecordVideoHeader />

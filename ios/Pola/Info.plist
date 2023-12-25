@@ -26,7 +26,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>gsdv-pola</string>
-          <string>me.gsdv.pola</string>
+          <string>me.gsdv.Pola</string>
         </array>
       </dict>
       <dict>

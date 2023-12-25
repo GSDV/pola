@@ -11,12 +11,14 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { Dashboard } from '@components/Dashboard';
 
+import LoadingSymbol from '@components/LoadingSymbol';
 
 
 
 export default function VideoIndex() {
     const [refresher, stateRefresh] = useState(false);
     const refresh = () => stateRefresh(!refresher);
+    const [addingVideo, setAddingVideo] = useState(false);
 
     const params = useGlobalSearchParams();
     const projIdx = Number(params.projIdx);
@@ -25,15 +27,19 @@ export default function VideoIndex() {
     const pmContext = useContext(ProjectManagerContext);
     const proj = pmContext.pm.projects[projIdx];
 
-    console.log(pmContext.pm.projects)
-    console.log(" ")
-    console.log(params)
-
     return (
     <>
-        <VideoHeader proj={proj} />
-        <VideoPlayer key={refresher.toString()} vidIdx={vidIdx} proj={proj} />
-        <VideoDashboard refresh={refresh} vidIdx={vidIdx} proj={proj} />
+        <VideoHeader proj={proj} addingVideo={addingVideo} />
+        {addingVideo ?
+            <View style={styles.addingVid}>
+                <LoadingSymbol title='Encoding and Adding Video' loadingMsg='This may take a few seconds, do not navigate away from this screen.' />
+            </View>
+        :
+        <>
+            <VideoPlayer key={refresher.toString()} vidIdx={vidIdx} proj={proj} />
+            <VideoDashboard refresh={refresh} vidIdx={vidIdx} proj={proj} setAddingVideo={setAddingVideo} />
+        </>
+        }
     </>
     );
 }
@@ -41,15 +47,21 @@ export default function VideoIndex() {
 
 
 function VideoHeader(props) {
-    const { proj } = props;
+    const { proj, addingVideo } = props;
     const router = useRouter();
 
-    console.log(props)
+    
     let options = [
-        { isMenu: false, icon: 'chevron-back', action: () => {router.back()} }
+        { isMenu: false, icon: 'chevron-back', action: router.back }
     ];
     
-    return (<Header title={proj.name} buttons={options} />);
+    return (<>
+        {addingVideo ?
+            <Header title={proj.name} buttons={[]} />
+        :
+            <Header title={proj.name} buttons={options} />
+        }
+    </>);
 }
 
 
@@ -70,13 +82,14 @@ function VideoPlayer(props) {
 
     return (
         <View style={ styles.container }>
-            <Video
-                ref={video}
-                source={{ uri: proj.generateFileName(vidIdx) }}
-                useNativeControls
-                style={{ width: 300, height: 350 }}
-                resizeMode={ResizeMode.COVER}
-                onPlaybackStatusUpdate={(status) => setStatus(status)}
+            <Video 
+                ref={video} 
+                source={{ uri: proj.generateFileName(vidIdx) }} 
+                useNativeControls 
+                style={{ width: 300, height: 350 }} 
+                resizeMode={ResizeMode.COVER} 
+                onPlaybackStatusUpdate={(status) => setStatus(status)} 
+                rate={30} 
             />
         </View>
     );
@@ -85,7 +98,7 @@ function VideoPlayer(props) {
 
 
 function VideoDashboard(props) {
-    const { vidIdx, proj, refresh } = props;
+    const { vidIdx, proj, refresh, setAddingVideo } = props;
     const router = useRouter();
     const pmContext = useContext(ProjectManagerContext);
 
@@ -97,8 +110,10 @@ function VideoDashboard(props) {
         });
 
         if (!result.canceled) {
+            setAddingVideo(true);
             await proj.updateVideo(vidIdx, result.assets[0].uri);
             await pmContext.saveProjects();
+            setAddingVideo(false);
             refresh();
         }
     };
@@ -144,6 +159,12 @@ const styles = StyleSheet.create({
         padding: 20,
         width: '100%',
         flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    addingVid: {
+        padding: 20,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     }
