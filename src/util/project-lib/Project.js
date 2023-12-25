@@ -26,7 +26,7 @@ export class Project {
         
         const destinationURI = this.generateFileName(this.numVideos);
         try {
-            await FFmpegKit.execute(`-y -i ${originURI} -vf "scale=2160:3840:force_original_aspect_ratio=decrease,pad=2160:3840:(ow-iw)/2:(oh-ih)/2:black" -r 30 -c:a copy -b:v 20M ${destinationURI}`);
+            await FFmpegKit.execute(`-y -i ${originURI} -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black" -r 30 -c:a copy -b:v 20M ${destinationURI}`);
             this.numVideos++;
             console.log('Video copied to local storage:', destinationURI);
         } catch (err) {
@@ -51,7 +51,7 @@ export class Project {
     async updateVideo(idx, originURI) {
         try {
             await FileSystem.deleteAsync(this.generateFileName(idx));
-            await FFmpegKit.execute(`-y -i ${originURI} -vf "scale=2160:3840:force_original_aspect_ratio=decrease,pad=2160:3840:(ow-iw)/2:(oh-ih)/2:black" -r 30 -c:a copy -b:v 20M ${this.generateFileName(idx)}`);
+            await FFmpegKit.execute(`-y -i ${originURI} -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black" -r 30 -c:a copy -b:v 20M ${this.generateFileName(idx)}`);
         }
         catch (err) { console.error('Error replacing video:', err); }
     }
