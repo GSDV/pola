@@ -32,6 +32,7 @@
         <data android:scheme="me.gsdv.pola"/>
         <data android:scheme="exp+pola"/>
         <data android:scheme="me.gsdv.Pola"/>
+        <data android:scheme="me.gsdv.PolaVideo"/>
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>

@@ -13,7 +13,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
 
-import { DraggableGrid } from 'react-native-draggable-grid';
+import DraggableGrid from '@util/draggable-grid';
 
 import LoadingSymbol from '@components/LoadingSymbol';
 
