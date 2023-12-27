@@ -1,7 +1,7 @@
 {
   "main": "expo-router/entry",
   "name": "pola_video",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "scripts": {
     "start": "expo start --dev-client",
     "prebuild": "expo prebuild",
