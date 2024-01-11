@@ -4,7 +4,7 @@
     "slug": "Pola",
     "owner": "gabsdv",
     "scheme": "gsdv-pola",
-    "version": "6.0.0",
+    "version": "8.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -20,6 +20,7 @@
     ],
     "ios": {
         "infoPlist": {
+            "CFBundleDisplayName": "Pola",
             "NSCameraUsageDescription": "Allow \"Pola\" to access to your camera if you want to record videos through the app.",
             "NSMicrophoneUsageDescription": "Allow \"Pola\" to access to your microphone if you want to record videos through the app.",
             "NSPhotoLibraryAddUsageDescription": "\"Pola\" needs to save photos so it can save the stitched video to your photo library.",
@@ -27,7 +28,7 @@
         },
         "supportsTablet": false,
         "bundleIdentifier": "me.gsdv.Pola",
-        "buildNumber": "6.0.0"
+        "buildNumber": "8.0.0"
     },
     "android": {
       "adaptiveIcon": {
