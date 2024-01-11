@@ -3,13 +3,8 @@ Easily make a video montage of your favorite memories! Relive your most treasure
 
 <img src="https://github.com/GSDV/pola/blob/main/assets/thumbnail.png" alt="Homepage" style="width:100%;"/>
 
-## Setup
-Run
- ```bash
- git clone https://github.com/GSDV/pola.git
- yarn install
- ```
-to get the code.
+## App
+Click [here](https://apps.apple.com/us/app/pola-video/id6474945344) to view the app on the App Store.
 
 
 ## How to Use
@@ -17,6 +12,14 @@ to get the code.
 2. Upload short clips.
 3. Rerrange clips to get a different order if needed.
 4. Press export and watch your stitched video!
+
+## Setup
+Run
+ ```bash
+ git clone https://github.com/GSDV/pola.git
+ yarn install
+ ```
+to get the code.
 
 
 ## Credit
